@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<param name="Threshold" value="ALL" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%-5p][%d{yyyy-MM-dd HH:mm:ss}][%C{1}.%M(%L)] %m%n" />
+		</layout>
+	</appender>
+	<appender name="FileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- 这里设置日志输出的绝对路径，如果设置相对路径，日志会生成在tomcat目录的相对路径里 -->
+		<!-- <param name="File" value="../logs/gameserver.log" /> -->
+		<param name="File" value="${catalina.base}/log/gameserver.log" />
+		<param name="Threshold" value="ALL" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		 <param name="BufferedIO" value="true" />
+        <!-- 8K为一个写单元 -->
+        <param name="BufferSize" value="8192" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%-5p][%d{yyyy-MM-dd HH:mm:ss}][%C{1}.%M(%L)] %m%n" />
+		</layout>
+	</appender>
+	<appender name="ErrorAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<!-- 这里设置日志输出的绝对路径，如果设置相对路径，日志会生成在tomcat目录的相对路径里 -->
+		<param name="File" value="${catalina.base}/log/gameservererror.log" />
+		<param name="Threshold" value="ERROR" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="BufferedIO" value="true" />
+        <!-- 8K为一个写单元 -->
+        <param name="BufferSize" value="8192" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%-5p][%d{yyyy-MM-dd HH:mm:ss}][%C{1}.%M(%L)] %m%n" />
+		</layout>
+	</appender>
+	<!-- 策划要求的一些日志记录,******请不要在其它地方使用这个appender******** -->
+	<appender name="palyerlogFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.base}/palyerlog/palyerlog.log" />
+		<param name="Threshold" value="ALL" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		 <param name="BufferedIO" value="true" />
+        <!-- 8K为一个写单元 -->
+        <param name="BufferSize" value="8192" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}$$%m%n" />
+		</layout>
+	</appender>
+	<logger name="com.tango.bomber.GameHandler">
+		<level value="DEBUG" />     
+	</logger>
+	<logger name="com.tango.bomber.processor.scene.EnterEyeProcessor19">
+		<level value="DEBUG" />     
+	</logger>
+	<logger name="com.tango.common.net.protoc.codec.ProtocCodecUtil">
+		<level value="DEBUG" />     
+	</logger>
+	
+	
+	<logger name="playerlog" additivity="false">
+		<level value="info" />
+		<appender-ref ref="palyerlogFileAppender" />
+	</logger>
+	<root>
+		<level value="error" />
+		<!-- 注:部署时,只用 FileAppender 开发时只用Console -->
+		<appender-ref ref="CONSOLE" /> <!-- -->
+		<appender-ref ref="ErrorAppender" />
+	</root>
+</log4j:configuration>
+
