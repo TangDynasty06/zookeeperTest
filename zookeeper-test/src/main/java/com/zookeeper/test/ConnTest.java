@@ -50,36 +50,41 @@ public class ConnTest {
 	
 	
 	public static void main(String[] args) throws InterruptedException {
-//		CustomClient client0 = createClient("client");
-//		doSomeThing(client0,"data");
-//		writeData(client0,"data");
-//		CountDownLatch latch = new CountDownLatch(10);
-//		CustomClient[] cc = new CustomClient[10];
-//		for (int i = 1; i <= 10; i++) {
-//			final int tt = i;
-//			Thread t = new Thread(
-//				new Runnable() {
-//					@Override
-//					public void run() {
+		CustomClient client0 = createClient("client0");
+		doSomeThing(client0,"data");
+		
+		CountDownLatch latch = new CountDownLatch(9);
+		CountDownLatch latch2 = new CountDownLatch(1);
+		for (int i = 1; i <= 9; i++) {
+			final int tt = i;
+			Thread t = new Thread(
+				new Runnable() {
+					@Override
+					public void run() {
 						// TODO Auto-generated method stub
-//						CustomClient client = createClient("client" + i);
-//						doSomeThing(client,"data" + i);
-//						writeData(client,"data" + i);
-//						latch.countDown();
-//					}
-//			});
-//			t.start();
-//		}
-//		try {
-//			latch.await();
-//			System.err.println("all do");
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		writeData(cc[9], "xixi");
+						CustomClient client = createClient("client" + tt);
+						doSomeThing(client,"data" + tt);
+						latch.countDown();
+					}
+			});
+			t.start();
+		}
+		try {
+			latch.await();
+			System.err.println("all do");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		writeData(client0, "xixi");
+		latch2.await();
 		
+		/*
+		 *单独尝试是可以的
+		 */
+		
+		/*
 		CustomClient client0 = createClient("first");
 		doSomeThing(client0,"first");
 		//writeData(client0,"first");
@@ -95,8 +100,10 @@ public class ConnTest {
 		
 		writeData(client0,"readWord");
 		
-		Thread.sleep(5000);
+		Thread.sleep(5000);*/
 	}
+	
+	
 	
 	private static class CustomClient{
 		private static byte count = 0;
